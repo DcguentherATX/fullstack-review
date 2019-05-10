@@ -1,9 +1,13 @@
 const express = require('express');
 let app = express();
+const axios = require('axios');
+const bodyParser = require('body-parser');
 
 app.use(express.static(__dirname + '/../client/dist'));
+app.use(bodyParser.json());
 
 app.post('/repos', function (req, res) {
+  console.log(req.body);
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
@@ -17,7 +21,7 @@ app.get('/repos', function (req, res) {
 
 let port = 1128;
 
-app.listen(port, function() {
+app.listen(port, function () {
   console.log(`listening on port ${port}`);
 });
 
