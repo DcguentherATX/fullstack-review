@@ -3,6 +3,7 @@ let app = express();
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const git = require('../helpers/github');
+const save = require('../database/index')
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
@@ -12,14 +13,14 @@ app.post('/repos', function (req, res) {
   console.log('express post request', req.body.user);
   let user = req.body.user;
 
-  git.getReposByUsername(user, (err, data) => {
+  git.getReposByUsername(user, (data, err) => {
     if (err) {
-      console.log('error getting repos: ', err);
+      console.log(err);
     } else {
-      console.log('repo data: ', data);
-      res.send(data);
+      console.log('repo data found');
+      save.save(data);
     }
-  })
+  });
 
   res.send('express post request');
   // TODO - your code here!
