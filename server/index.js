@@ -2,12 +2,26 @@ const express = require('express');
 let app = express();
 const axios = require('axios');
 const bodyParser = require('body-parser');
+const git = require('../helpers/github');
 
 app.use(express.static(__dirname + '/../client/dist'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.post('/repos', function (req, res) {
-  console.log(req.body);
+  console.log('express post request', req.body.user);
+  let user = req.body.user;
+
+  git.getReposByUsername(user, (err, data) => {
+    if (err) {
+      console.log('error getting repos: ', err);
+    } else {
+      console.log('repo data: ', data);
+      res.send(data);
+    }
+  })
+
+  res.send('express post request');
   // TODO - your code here!
   // This route should take the github username provided
   // and get the repo information from the github API, then
@@ -15,6 +29,8 @@ app.post('/repos', function (req, res) {
 });
 
 app.get('/repos', function (req, res) {
+  console.log('get server');
+  res.send('getting in server')
   // TODO - your code here!
   // This route should send back the top 25 repos
 });
