@@ -11,13 +11,26 @@ class App extends React.Component {
     this.state = {
       repos: []
     }
-
   }
+
+  componentDidMount() {
+    Axios.get('/repos')
+      .then((response) => {
+        this.setState({
+          repos: response.data
+        })
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }
+
 
   search(term) {
     console.log(`${term} was searched`);
     // TODO
-    Axios.post('/repos', { user: term })
+    Axios.post('/', { user: term })
       .then((res) => {
         console.log('axios post req')
         console.log(res)
